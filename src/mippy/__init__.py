@@ -11,7 +11,10 @@ class GattTool:
     def __init__(self, interface, address):
         cmd = 'gatttool -i %s -b %s -I' % (interface, address)
         self.child = pexpect.spawn(cmd)
-        self.child.logfile = sys.stdout
+        try:
+            self.child.logfile = sys.stdout.buffer.raw
+        except:
+            self.child.logfile = sys.stdout
         self.child.expect(self.PROMPT, timeout=1)
 
     def connect(self):
